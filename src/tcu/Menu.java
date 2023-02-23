@@ -4,9 +4,16 @@
  */
 package tcu;
 
+import java.applet.AudioClip;
 import java.awt.Color;
+import java.io.File;
+import java.io.InputStream;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 
 /**
@@ -20,30 +27,30 @@ public class Menu extends javax.swing.JFrame {
                              "What is this sport/activity?",
                              "What is this sport/activity?"},
                             
-                            {"_______ Randall like surfing? Yes, he ______ ",
-                            "_______ your friends enjoy skate boarding? No, they _______",
-                            "_______ Amanda love boxing? Yes, she ______",
-                            "_______ you play baseball? No, I _______"},
+                            {"_______ Randall like surfing? Yes, he ______.",
+                            "_______ your friends enjoy skate boarding? No, they _______.",
+                            "_______ Amanda love boxing? Yes, she ______.",
+                            "_______ you play baseball? No, I _______."},
                             
-                            {"Cleats are an equipment used in _______",
-                             "A helmet is an equipment used in _______",
-                             "Goggles are an equipment used in _______",
-                             "Gloves are an equipment used in _______"}};
+                            {"Cleats are used in _______.",
+                             "A helmet is used in _______.",
+                             "Goggles are used in _______.",
+                             "Gloves are used in _______."}};
     
     String[][][] options = {{{"Skate boarding","Cycling","Boxing","Swimming","Cycling"},
                              {"Running","Surfing","Gymnastics","Martial arts","Running"},
                              {"Baseball","Walking","Soccer","Boxing","Soccer"},
                              {"Surfing","Volleyball","Baseball","Gymnastics","Volleyball"}},
         
-                            {{"Do – do","Does – do","Does – does","Do - Does","Does – does"},
-                             {"Do – do not","Does – do","Does – does","Do – Does not","Do – do not"},
-                             {"Do – do","Does – does","Do - Does","Does – do","Does – does"},
-                             {"Does – does","Do – Does","Do – do not","Does – do not","Do – do not"}},
+                            {{"Do – do","Does – do","Does – does","Do - does","Does – does"},
+                             {"Do – don't","Does – do","Does – does","Do – doesn't","Do – don't"},
+                             {"Do – do","Does – does","Do - does","Does – do","Does – does"},
+                             {"Does – does","Do – does","Do – don't","Does – don't","Do – don't"}},
                             
-                            {{"Skate boarding","Martial arts","Surfing","Soccer","Soccer"},
-                             {"Cycling","Running","Gymnastics","Volleyball","Cycling"},
-                             {"Baseball","Boxing","Swimming","Gymnastics","Swimming"},
-                             {"Running","Boxing","Surfing","Swimming","Boxing"}}};
+                            {{"skate boarding","martial arts","surfing","soccer","soccer"},
+                             {"cycling","running","gymnastics","volleyball","cycling"},
+                             {"baseball","boxing","swimming","gymnastics","swimming"},
+                             {"running","boxing","surfing","swimming","boxing"}}};
     
     boolean greenTurn = true, tab1Enabled = true, tab2Enabled = true, tab3Enabled = true;//, tab4Enabled = true;
     int index = 0, difficulty = 0, questionNumber = 0, points = 0, redPoints = 0, greenPoints = 0, lvlOneQuestions = 0, lvlTwoQuestions = 0, lvlThreeQuestions = 0;//, lvlFourQuestions = 0;
@@ -58,6 +65,7 @@ public class Menu extends javax.swing.JFrame {
         bg.add(jRadioButton3);
         bg.add(jRadioButton4);
         jButtonFinish.setVisible(false);
+        enableRbuttons(false);
     }
     
     public void getSelectedOption(JRadioButton rbtn)
@@ -85,7 +93,7 @@ public class Menu extends javax.swing.JFrame {
 //            tab4Enabled = true;
 //            tab4.setBackground(new Color(204,204,255));
 //        }
-        
+        String musicPath;
         if(rbtn.getText().equals(options[difficulty][questionNumber][4]))
         {
             if(greenTurn == true){
@@ -96,15 +104,27 @@ public class Menu extends javax.swing.JFrame {
                 LblRedPts.setText("Red Team: " + redPoints);
             }
             LblQuestion.setText("Correct!");
+            musicPath = "/tcu/Correct Answer Sound Effect.wav";
         }
         else{
             LblQuestion.setText("Incorrect.");
+            musicPath = "/tcu/Sound effect WRONG ANSWER.wav";
+        }
+        try{
+            AudioInputStream audioInput = AudioSystem.getAudioInputStream(getClass().getResource(musicPath));
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInput);
+            clip.start();
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(jPanel2, "Error"+e.getMessage());
         }
         index++;
         enableRbuttons(false);
         if(index == questions.length*questions[0].length){
             jButtonFinish.setVisible(true);
         }else{
+            LblSelect.setText("Select a question below:");
             if(greenTurn == true){
                 greenTurn = false;
                 LblTurn.setText("Turn: Red Team");
@@ -153,6 +173,7 @@ public class Menu extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        LblSelect = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanelQContainer = new javax.swing.JPanel();
         LblQuestion = new javax.swing.JLabel();
@@ -178,7 +199,7 @@ public class Menu extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("100");
+        jLabel1.setText("100 points");
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
         javax.swing.GroupLayout tab1Layout = new javax.swing.GroupLayout(tab1);
@@ -207,7 +228,7 @@ public class Menu extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("200");
+        jLabel2.setText("200 points");
 
         javax.swing.GroupLayout tab2Layout = new javax.swing.GroupLayout(tab2);
         tab2.setLayout(tab2Layout);
@@ -235,7 +256,7 @@ public class Menu extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("300");
+        jLabel3.setText("300 points");
 
         javax.swing.GroupLayout tab3Layout = new javax.swing.GroupLayout(tab3);
         tab3.setLayout(tab3Layout);
@@ -265,18 +286,23 @@ public class Menu extends javax.swing.JFrame {
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tcu/firma-promocional-con-texto-celeste.png"))); // NOI18N
 
+        LblSelect.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        LblSelect.setForeground(new java.awt.Color(255, 255, 255));
+        LblSelect.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        LblSelect.setText("Select a question below:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(tab2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tab1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tab3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tab2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tab1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tab3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -284,7 +310,8 @@ public class Menu extends javax.swing.JFrame {
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel8)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(LblSelect, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -293,6 +320,8 @@ public class Menu extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
+                .addComponent(LblSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tab1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tab2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -450,6 +479,7 @@ public class Menu extends javax.swing.JFrame {
 
     private void tab1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tab1MouseClicked
         if(tab1Enabled == true){
+            LblSelect.setText(" ");
             enableRbuttons(true);
             bg.clearSelection();
 
@@ -487,6 +517,7 @@ public class Menu extends javax.swing.JFrame {
 
     private void tab2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tab2MouseClicked
         if(tab2Enabled == true){
+            LblSelect.setText(" ");
             enableRbuttons(true);
             bg.clearSelection();
 
@@ -524,11 +555,22 @@ public class Menu extends javax.swing.JFrame {
                     LblQuestion.setText("It's a tie!");
                 }
             }
+            try{
+                String musicPath = "/tcu/WIN sound effect no copyright.wav";
+                AudioInputStream audioInput = AudioSystem.getAudioInputStream(getClass().getResource(musicPath));
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioInput);
+                clip.start();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(jPanel2, "Error"+e.getMessage());
+            }
         }
     }//GEN-LAST:event_jButtonFinishActionPerformed
 
     private void tab3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tab3MouseClicked
         if(tab3Enabled == true){
+            LblSelect.setText(" ");
             enableRbuttons(true);
             bg.clearSelection();
         
@@ -603,6 +645,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel LblGreenPts;
     private javax.swing.JLabel LblQuestion;
     private javax.swing.JLabel LblRedPts;
+    private javax.swing.JLabel LblSelect;
     private javax.swing.JLabel LblTurn;
     private javax.swing.JButton jButtonFinish;
     private javax.swing.JLabel jLabel1;
