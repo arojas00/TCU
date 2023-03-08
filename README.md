@@ -6,7 +6,7 @@ Repository for "Sports Trivia!" developed for TCU 658 UCR.
 
 ### Requirements
 
-- JRE 8(https://www.java.com/en/download/manual.jsp)
+- JRE 8 (https://www.java.com/en/download/manual.jsp)
 
 ### Description
 
